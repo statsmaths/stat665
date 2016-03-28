@@ -305,7 +305,7 @@ networks. An alternative approach is to use a concept similar to
 the physical idea of momentum. Specifically, we use updates of
 the form
 \begin{align*}
-v_{t+1} &= \mu \cdot v_{t+1} - \eta \cdot \nabla f(\beta_{t}) \\
+v_{t+1} &= \mu \cdot v_{t} - \eta \cdot \nabla f(\beta_{t}) \\
 \beta_{t+1} &= \beta_{t} + v_{t+1}.
 \end{align*}
 Where the value $\mu \in [0,1]$ serves as proxy for friction.
@@ -326,7 +326,7 @@ when optimizing non-convex surfaces, is to use Nesterov's Method.
 This calculates the gradient at the spot that would be arrived
 at with the current momentum. Specifically:
 \begin{align*}
-v_{t+1} &= \mu \cdot v_{t+1} - \eta \cdot \nabla f(\beta_t + \mu \cdot v_{t+1}) \\
+v_{t+1} &= \mu \cdot v_{t} - \eta \cdot \nabla f(\beta_t + \mu \cdot v_{t}) \\
 \beta_{t+1} &= \beta_{t} + v_{t+1}.
 \end{align*}
 A picture helps considerably in understanding this.
