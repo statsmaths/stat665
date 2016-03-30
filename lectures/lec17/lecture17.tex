@@ -117,6 +117,41 @@ all be useful for the classification task at hand.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{} \oldB \small
 
+\textbf{\yblue{Filters: History}}
+
+The idea of using a filter on images is not a new idea to
+neural networks; the difference here is the filters are
+adaptively learned from data.
+
+For example, take the following fixed kernel weights:
+\begin{align*}
+\left(\begin{array}{cc} 1 & 0 \\ 0 & -1 \end{array} \right)
+\end{align*}
+What happens when we apply this over an image?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=0.7\textheight]{img/both.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=0.8\textheight]{img/gabor.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
 A convolutional layer with $3$ filters:
 
 \begin{center}
@@ -130,25 +165,13 @@ A convolutional layer with $3$ filters:
 
 \textbf{\yblue{Zero padding}}
 
-You'll have noticed that the grid of pixels of the output image
-has one fewer row and one fewer column than the input image.
+You may have noticed that the grid of pixels of the output image
+will have fewer rows and columns than the input image.
 In some cases this is okay, but it is often advantageous to
 preserve the size of the grid (there are several reasons that we
 want to grid size to be divisible by $2^n$ for some reasonably large
-$n$). To do so, we can add an extra row and column of zeros
+$n$). To do so, we can add extra rows and columns of zeros
 (zero padding) to the input before applying the
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile] \frametitle{} \oldB \small
-
-A nice demo of applying convolution over a grid using alternative
-strides and zero padding:
-
-\begin{center}
-\url{http://cs231n.github.io/assets/conv-demo/index.html}
-\end{center}
 
 \end{frame}
 
@@ -196,6 +219,18 @@ A stride of $1$:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{} \oldB \small
 
+A nice demo of applying convolution over a grid using alternative
+strides and zero padding:
+
+\begin{center}
+\url{http://cs231n.github.io/assets/conv-demo/index.html}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
 \textbf{\yblue{Tensors}}
 
 A convolution can also be described in purely algebraic
@@ -226,12 +261,14 @@ of the image. These layers are called pooling layers; they differ
 from convolution layers because:
 \begin{itemize}
 \item they have no learned weights
-\item are applying separately to each kernel
+\item may not be linear functions of their inputs
+\item are applied separately to each kernel
 \item the stride is usually equal to the size of the kernel; that is,
 the regions are non-overlapping
 \end{itemize}
 The most common type of pooling (by far) is called max-pooling, with
-a 2x2 kernel. This halves the extent of each dimension (reduces the
+a 2x2 kernel and stride of $2$.
+This halves the extent of each dimension (reduces the
 number of data points by a factor of $4$ for 2D images) and can greatly
 decrease the learning time and improve over-fitting of the data.
 
