@@ -549,7 +549,7 @@ ordinary least squares estimator of a multivariate regression function:
 \begin{align*}
 f(\beta) &= \frac{1}{n} \cdot \sum_i f_i(\beta) \\
 &= \frac{1}{n} \cdot \sum_i (y_i - x_i \beta)^2 \\
-&= \frac{1}{n} \cdot \sum_i (y_i^2 + \beta^t x_i^t x_i \beta - 2 y_i x_i^t \beta)
+&= \frac{1}{n} \cdot \sum_i (y_i^2 + \beta^t x_i^t x_i \beta - 2 y_i x_i \beta)
 \end{align*}
 
 \end{frame}
@@ -563,11 +563,11 @@ Now, the gradient of $f$ is given by:
 \begin{align*}
 \nabla f &= \frac{1}{n} \cdot \sum_i f_i(\beta) \\
 &= \frac{1}{n} \cdot \sum_i  \nabla f_i(\beta) \\
-&= \frac{2}{n} \cdot \sum_i  (x_i^t x_i \beta - x_i^t y)
+&= \frac{2}{n} \cdot \sum_i  (x_i^t x_i \beta - x_i^t y_i)
 \end{align*}
 And can be approximated by:
 \begin{align*}
-\nabla f &\approx \frac{2}{m} \cdot \sum_{i \in M}  (x_i^t x_i \beta - x_i^t y)
+\nabla f &\approx \frac{2}{m} \cdot \sum_{i \in M}  (x_i^t x_i \beta - x_i^t y_i)
 \end{align*}
 For a mini-batch $M$ of size $m$.
 
