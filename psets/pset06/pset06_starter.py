@@ -21,8 +21,8 @@ def load_data():
     X_test = X_test[(y_test < 3).reshape(10000)]
     y_test = y_test[(y_test < 3).reshape(10000)]
     # convert class vectors to binary class matrices
-    Y_train = np_utils.to_categorical(y_train, 10)
-    Y_test = np_utils.to_categorical(y_test, 10)
+    Y_train = np_utils.to_categorical(y_train, 3)
+    Y_test = np_utils.to_categorical(y_test, 3)
     return X_train, Y_train, X_test, Y_test
 
 # copy the first nlayers of model 'model' and freeze
@@ -51,7 +51,7 @@ model = Sequential()
 model.add(Dense(16, input_shape=(3072,)))
 model.add(Activation('relu'))
 model.add(Dropout(0.2))
-model.add(Dense(10))
+model.add(Dense(3))
 model.add(Activation('softmax'))
 
 rms = RMSprop()
