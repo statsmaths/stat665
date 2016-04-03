@@ -57,7 +57,9 @@ model.add(Activation('softmax'))
 rms = RMSprop()
 model.compile(loss='categorical_crossentropy', optimizer=rms)
 model.fit(X_train, Y_train, batch_size=32, nb_epoch=1, verbose=1,
-          show_accuracy=True, validation_data=(X_test, Y_test))
+          show_accuracy=True, validation_split=0.2)
+
+
 
 print('Classifcation rate %02.3f' % model.evaluate(X_test, Y_test, show_accuracy=True)[1])
 
