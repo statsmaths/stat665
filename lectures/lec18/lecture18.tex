@@ -12,7 +12,7 @@
 \vfill
 
 {\fontsize{0.7cm}{0cm}\selectfont Lecture 18 \\\vspace{0.2cm}
-Computer Vision with CNNs}\\\vspace{0.5cm}
+Transfer Learning and Computer Vision I}\\\vspace{0.5cm}
 04 April 2016
 
 \vspace{2cm}
@@ -42,7 +42,197 @@ Notes:
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0.5cm}\selectfont Autoencoders and Transfer Learning}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{An Autoencoder}}
+
+An autoencoder is a learning algorithm that attempts to
+learn a compressed representation of its output. It is
+conceptually an unsupervised task, but one that neural
+networks are quite good at.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Neural network Autoencoder}}
+
+To build a neural network auto-encoder, we simply build a neural
+network where the input is equal to the output. This is only meaningful
+when there exists a hidden layer with fewer nodes than the input
+layer (otherwise we can perfectly reconstruct the image):
+
+\begin{center}
+\includegraphics[height=0.5\textheight]{img/autoencoder_network1.png}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{The botteneck layer}}
+
+Notice that by storing the values in the hidden layer with
+the fewest nodes, we get a compression of the input into a
+lower dimensional space (other hidden layers also do this, but
+may do a smaller amount of compression).
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Dimensionality reduction}}
+
+We can reason that for many tasks, if this lower dimensional representation
+does a good job of reconstructing the image, there is enough information
+contained in that layer to also do learning tasks. If the degree of compression
+is high, this can aid in learning because the input dimensionality has been
+reduced.
+
+\pause This is exactly the same as computing principal components and then using
+the first few components to do regression on.
+
+\pause It turns out, very helpfully, that the hidden layers of non-autoencoding
+networks perform a supervised dimensionality reduction. We can often think of
+the inner layers in the same way as the bottleneck layers for an autoencoder.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Autoencoder demo}}
+
+A live demo of an autoencoder on the MNIST-10 dataset:
+\begin{quote}
+\url{http://cs.stanford.edu/people/karpathy/convnetjs/demo/autoencoder.html}
+\end{quote}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \footnotesize
+
+\yblue{\textbf{Transfer learning}}
+
+Remember when we were predicting crimes on the City of Chicago dataset; many
+of you were quite concerned about why the following worked so well:
+\begin{enumerate}
+\item Train a model on the output $Z$, using the covariate matrix $X$
+\item Use the predicted values, along with $X$, to learn a new output $Y$
+\end{enumerate}
+\pause We can do this with neural networks in a more natural way by:
+\begin{enumerate}
+\item Train a neural network on an output $Z$, using the inputs $X$
+\item Remove the learned output layer from this network, and attach another
+output layer to capture a new output $Y$
+\item Train this new model, either using the weights from the first step as
+a starting point (pre-training) or freezing them (transfer learning)
+\end{enumerate}
+Does this process make more intuitive sense now that we can see the first
+step as supervised dimensionality reduction?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \footnotesize
+
+\yblue{\textbf{Why is this all important?}}
+
+In order to get state-of-the-art results using neural networks, we
+need to train very large and deep models. This requires a lot of
+data and computing power, both of which most users do not have.
+To circumvent this, some combination of pre-training or transfer
+learning is used instead.
+
+This is largely why understanding the recent history of computer
+vision models is so important; most computer visions tasks will
+require one to use and modify these models in some form.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Autoencoding, Transfer Learning, and Pre-training}}
+
+Good references for these topics are given by
+\begin{quote}
+Mesnil, G., Dauphin, Y., Glorot, X., Rifai, S., Bengio, Y., Goodfellow, I., Lavoie, E., Muller, X., Desjardins, G., Warde-Farley, D., Vincent, P., Courville, A., and Bergstra, J. (2011). Unsupervised and transfer learning challenge: a deep learning approach.
+\end{quote}
+And,
+\begin{quote}
+Long, Jonathan L., Ning Zhang, and Trevor Darrell. "Do Convnets Learn Correspondence?." Advances in Neural Information Processing Systems. 2014.
+\end{quote}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{1cm}\selectfont Computer Vision I}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{CNN Review}}
+
+A 5x5 kernel with a stride of $1$:
+
+\begin{center}
+\includegraphics[height=0.66\textheight]{img/tikz45.png}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{CNN Review}}
+
+Max pooling with 2x2 kernel and stride of $2$:
+
+\begin{center}
+\includegraphics[height=0.66\textheight]{img/tikz47.png}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{CNN Review}}
+
+A complete CNN model:
+
+\begin{center}
+\includegraphics[height=0.5\textheight]{img/tikz49.png}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \footnotesize
 
 \yblue{\textbf{Convolutional Models in Computer Vision}}
 
@@ -54,8 +244,10 @@ neural networks. Today, I'll focus on the following set of models: \vspace*{-0.5
 \item OverFeat (2013)
 \item VGG-16, VGG-19 (2014)
 \item GoogLeNet (2014)
+\item PReLUnet (2015)
 \item ResNet-50, ResNet-101, ResNet-152 (2015)
 \item SqueezeNet (2016)
+\item Stochastic Depth (2016)
 \item ResNet-200, ResNet-1001 (2016)
 \end{itemize} \vspace*{-0.5cm}
 When you hear about these models people may be referring to: the architecture,
@@ -578,6 +770,33 @@ arXiv:1512.03385 (2015).
 
 \begin{center}
 \includegraphics[width=\textwidth]{img/resNet.jpg}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Stochastic Depth Models (2016)}}
+
+Another tweak on the ResNet architecture, which subsamples
+layers in the network:
+\begin{quote}
+Gao Huang, Yu Sun, Zhuang Liu, Daniel Sedra, Kilian Weinberger.
+"Deep Networks with Stochastic Depth", arXiv preprint arXiv:1603.09382 (2016).
+\end{quote}
+Notice how this seems like an almost obvious thing to try
+given the ResNet architecture, but less-so in a generic
+neural network.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{img/sampleNet.jpg}
 \end{center}
 
 \end{frame}
