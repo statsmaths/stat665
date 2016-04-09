@@ -6,6 +6,9 @@ from keras.layers.core import Dense, Dropout, Activation
 from keras.optimizers import RMSprop
 from keras.utils import np_utils
 
+# set this to false once you have tested your code!
+TEST = True
+
 # function to read in and process the cifar-10 data; set the
 # number of classes you want
 def load_data(nclass):
@@ -29,5 +32,11 @@ def load_data(nclass):
         Y_test = Y_test[:1000]
     return X_train, Y_train, X_test, Y_test
 
+
+# Note: You'll need to do this manipulation to construct the
+# output of the autoencoder. This is because the autoencoder
+# will have a flattend dense layer on the output, and you need
+# to give Keras a flatted version of X_train
+X_train_auto_output = X_train.reshape(X_train.shape[0], 3072)
 
 

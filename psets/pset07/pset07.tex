@@ -122,32 +122,40 @@ How does the pattern mimic and/or differ from that seen in question I?
 \textbf{III. Freezing the features}
 
 Using only a kernel of size $3$, take the two models from part I and II
-and freeze the convolution layer. Refit the top dense layer, but in both
-cases do so on the $2$ class classification task.
+and freeze the convolution layer (make sure you also copy the max-pooling
+and activation function). Refit the top dense layer, but in both
+cases do so on the $2$ class classification task. Notice that you already
+did $2$ class classification for part I, so this just amount to re-training
+the same model with the bottom frozen. For the model in part II, you'll
+need to change the output layer to accommodate the new output dimensions
+and the softmax needed for classification.
 How do the testing and training rates change and compare to one another?
 Give an explanation for why you might see such results.
 
 \textbf{IV. Transfer learning}
 
-Repeat question III, but now use the entire CIFAR-10 dataset. To be clear, the
-feature level is trained on only the subsampled data, frozen, and then used as
-an input to a single dense layer on the entire dataset. How does this rate compare
-to the rates you had on problem set 5?
+Repeat question III, but now use the entire CIFAR-10 dataset (only the size
+of the output layer needs to change in the structure of the models). To be clear, the
+feature level is trained on only the two-class data, frozen, and then used as
+an input to a single dense layer on the entire ten-class dataset. How does
+this rate compare to the rates you had on problem set 5?
 
 \textbf{V. Double convolution}
 
-Using a kernel of size $3$, repeat question I, but now use two successive
-convolution layers. Note that there should be an activation layer between
-them, but no max pooling or dropout until the end. How does the result from
-this model compare to the result from using only one convolution?
+Using a kernel of size $3$ now use two successive convolution layers on the
+2-class classification task. Present the classification rates and try
+to explain why you see the pattern than you see. How does this compare to
+the results in question I? Note that there should be an activation layer between
+the two convolutions, but no max pooling or dropout until the end. How does
+the result from this model compare to the result from using only one convolution?
 
 \textbf{VI. Extensions}
 
-Keeping the feature levels fixed as in part II, try to modify the architecture of the
-learning algorithm from part III to achieve the best classification rates you can on the
-entire CIFAR-10 dataset. For example, change the learning algorithm to plain vanilla SGD,
-add another dense layer, use regularization, and/or increase the number of hidden nodes.
-Describe your model and give the final classification rates.
+Modify any of the models we constructed here to achieve the best classification
+rates you can on the entire CIFAR-10 dataset. For example, change the learning
+algorithm to plain vanilla SGD, add another dense layer, use regularization,
+and/or increase the number of hidden nodes. Describe your model and give the
+final classification rates.
 
 
 \end{document}
