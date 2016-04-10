@@ -1,0 +1,603 @@
+\documentclass[xetex,mathserif,serif,aspectratio=169]{beamer}
+
+\input{../import.tex}
+\usepackage[]{algorithm2e}
+\usepackage{../kbordermatrix}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 19 \\\vspace{0.2cm}
+Computer Vision II}\\\vspace{0.5cm}
+06 April 2016
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 365/665
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \footnotesize
+
+\yblue{\textbf{Convolutional Models in Computer Vision}}
+
+There is a long history of specific advances and uses of convolutional
+neural networks. Today, I'll focus on the following set of models: \vspace*{-0.5cm}
+\begin{itemize}
+\item LeNet-5 (1998)
+\item AlexNet (2012)
+\item OverFeat (2013)
+\item VGG-16, VGG-19 (2014)
+\item GoogLeNet (2014)
+\item PReLUnet (2015)
+\item ResNet-50, ResNet-101, ResNet-152 (2015)
+\item SqueezeNet (2016)
+\item Stochastic Depth (2016)
+\item ResNet-200, ResNet-1001 (2016)
+\end{itemize} \vspace*{-0.5cm}
+When you hear about these models people may be referring to: the architecture,
+the architecture and weights, or just to the general approach.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{AlexNet (2012)}}
+
+A model out of the University of Toronto, now known as AlexNet,
+became the first CNN to produce state-of-the-art classification
+rates on the ILSVRC-2012 dataset:
+\begin{quote}
+Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E. Hinton. ``Imagenet classification with deep convolutional neural networks." In Advances in neural information processing systems, pp. 1097-1105. 2012.
+\end{quote}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{AlexNet contributions }}
+
+AlexNet was the first to put together several key advances, all
+of which we have already used or discussed in this class:
+\begin{enumerate}
+\item relu units
+\item dropout
+\item data augmentation
+\item multiple GPUs
+\end{enumerate}
+While not all invented by the AlexNet group, they were the first
+to put them all together and figure out how to train a deep
+neural network.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/alexNet.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Visualizing CNNs (2013)}}
+
+Following the success of AlexNet, the year 2013 saw a much
+larger number of neural network entrants into the ILSVRC
+competition. The winning entry came about due to the
+visualization techniques described in the following paper:
+\begin{quote}
+Zeiler, Matthew D., and Rob Fergus. ``Visualizing and understanding convolutional networks." Computer vision–ECCV 2014. Springer International Publishing, 2014. 818-833.
+\end{quote}
+Their incredibly diverse set of techniques allowed the team
+to tweak the AlexNet architecture to get even better results.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/vizCover.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/vizDistort.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/vizEvolve.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/vizFeatureClip.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/vizModel.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+A demo of applying these techniques to the MNIST dataset with ConvNetJS:
+
+\begin{center}
+\url{http://cs.stanford.edu/people/karpathy/convnetjs/demo/mnist.html}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{OverFeat (2013)}}
+
+The 2013 competition also brought about the incredibly influential
+OverFeat model from a team based at NYU:
+\begin{quote}
+Sermanet, Pierre, David Eigen, Xiang Zhang, Michaël Mathieu, Rob Fergus, and Yann LeCun. ``Overfeat: Integrated recognition, localization and detection using convolutional networks." arXiv preprint arXiv:1312.6229 (2013).
+\end{quote}
+The won the image localization task, by trying to solve localization
+and identification in a unified process. I'll give a very simplified
+version of what they did (the paper is a great read, and I suggest
+working through it if you are interested in computer vision).
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/overFeatModel.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{img/overFeatLocal.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.95\textwidth]{img/overFeatLocalMore.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.75\textwidth]{img/overFeatIdea.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\textbf{\magenta{Python demo I: OverFeat adaptation of AlexNet (2012)}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{VGG-16, VGG-19 (2014)}}
+
+One of the top entries from 2014, by an Oxford-based team, took
+advantage of significantly deeper models.
+\begin{quote}
+Simonyan, Karen, and Andrew Zisserman. ``Very deep convolutional networks for large-scale image recognition." arXiv preprint arXiv:1409.1556 (2014).
+\end{quote}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{img/vggModel.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\textbf{\magenta{Python demo II: Pre-trained VGG-19 Model}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{GoogLeNet (2014)}}
+
+The winning entry from 2014, by Google, also took advantage
+of much deeper architectures:
+\begin{quote}
+Szegedy, Christian, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed, Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, and Andrew Rabinovich. ``Going deeper with convolutions." In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 1-9. 2015.
+\end{quote}
+They called their model GoogLeNet in honor of the original LeNet
+architecture.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=1.0\textwidth]{img/we-need-to-go-deeper.jpg}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/googLeNetInception.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.95\textwidth]{img/googLeNetModel.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/googlenet_diagram.png}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\textbf{\magenta{Python demo III: GoogLeNet - Inception Module}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{img/googLeNetVsHuman.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Batch Normalization (2015)}}
+
+Not a model architecture itself, but one very useful new tweak in
+the past year has been Batch Normalization, first presented in this
+paper:
+\begin{quote}
+ Ioffe, Sergey, and Christian Szegedy. ``Batch normalization: Accelerating deep network training by reducing internal covariate shift." arXiv preprint arXiv:1502.03167
+\end{quote}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\textbf{\magenta{Python demo IV: Batch normalization}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{PReLUnet (2015)}}
+
+Microsoft's first contribution in 2015 was the idea of using
+a modifed ReLU activation function:
+\begin{quote}
+He, Kaiming, et al. ``Delving deep into rectifiers: Surpassing human-level performance on imagenet classification." Proceedings of the IEEE International Conference on Computer Vision. 2015.
+\end{quote}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/prelunetActivation.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{ResNet-50, -101, -152 (2015)}}
+
+Finally, in the 2015 competition, Microsoft produced an model
+which is extremely deeper than any previously used. These models
+are known as ResNet, with their depth given as an suffix.
+\begin{quote}
+He, Kaiming, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
+``Deep Residual Learning for Image Recognition." arXiv preprint
+arXiv:1512.03385 (2015).
+\end{quote}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/resNetresidualUnit.jpg}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/resNetPerform.jpg}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/resNetModel.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/resNet.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\textbf{\magenta{Python demo V: ResNet Unit (2015)}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Stochastic Depth Models (2016)}}
+
+Another tweak on the ResNet architecture, which subsamples
+layers in the network:
+\begin{quote}
+Gao Huang, Yu Sun, Zhuang Liu, Daniel Sedra, Kilian Weinberger.
+``Deep Networks with Stochastic Depth", arXiv preprint arXiv:1603.09382 (2016).
+\end{quote}
+Notice how this seems like an almost obvious thing to try
+given the ResNet architecture, but less-so in a generic
+neural network.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{img/sampleNet.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{ResNet-200, -1001 (2016)}}
+
+Microsoft's update to last year's model. Posted only two
+weeks ago!
+\begin{quote}
+He, Kaiming, et al. ``Identity Mappings in Deep Residual Networks." arXiv preprint arXiv:1603.05027 (2016).
+\end{quote}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{img/resNet1001.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{SqueezeNet (2016)}}
+
+A new line of research involves looking at ways to produce near
+state-of-the-art results with a minimal model size (or minimal
+computational cost):
+\begin{quote}
+Iandola, Forrest N., et al. ``SqueezeNet: AlexNet-level accuracy with
+50x fewer parameters and <1MB model size." arXiv preprint arXiv:1602.07360 (2016).
+\end{quote}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.3\textwidth]{img/squeezeNetModel.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.7\textwidth]{img/squeezeNetFire.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/squeezeNetResults.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\textbf{\yblue{Microsoft Common Images in Context (MS COCO)}}
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/mscocoWeb.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/segmentMSCOCO.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.75\textwidth]{img/segmentMSCOCO2.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[width=0.75\textwidth]{img/mscocoCaption.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+More information is found on their website, \url{http://mscoco.org/},
+and in the paper describing the dataset:
+\begin{quote}
+Lin, Tsung-Yi, et al. ``Microsoft coco: Common objects in context."
+Computer Vision–ECCV 2014. Springer International Publishing, 2014. 740-755.
+\end{quote}
+I should mention that Microsoft's own entry (ResNet) essentially
+swept every winning metric with their technique.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Video Classification}}
+
+I don't want to make it sound as though the only interesting research
+in computer vision with neural networks involves one of these large
+public competitions (though the biggest conceptual advances have come out of
+these). For example, an influential paper doing video scene classification
+\begin{quote}
+Karpathy, Andrej, George Toderici, Sanketh Shetty, Thomas Leung, Rahul Sukthankar, and Li Fei-Fei. ``Large-scale video classification with convolutional neural networks." In Proceedings of the IEEE conference on Computer Vision and Pattern Recognition, pp. 1725-1732. 2014.
+\end{quote}
+Which yields a fantastic video demonstration of the output:
+\begin{quote}
+\url{https://www.youtube.com/watch?v=qrzQ_AB1DZk}
+\end{quote}
+
+\end{frame}
+
+
+
+\end{document}
+
+
+
+
+
+
+
