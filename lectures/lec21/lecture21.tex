@@ -1,0 +1,455 @@
+\documentclass[xetex,mathserif,serif,aspectratio=169]{beamer}
+
+\input{../import.tex}
+\usepackage[]{algorithm2e}
+\usepackage{../kbordermatrix}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 21 \\\vspace{0.2cm}
+Recurrent Neural Networks}\\\vspace{0.5cm}
+20 April 2016
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 365/665
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Recurrent neural networks}}
+
+Recurrent neural networks address a concern with traditional
+neural networks that becomes apparent when dealing with,
+amongst other applications, text analysis: the issue of
+variable width inputs.
+
+\pause This is also, of course, a concern with images but the
+solution there is quite different because we can stretch and
+scale images to fit whatever size we need at the moment. This
+not so with words.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{RNNs as time}}
+
+An equivalent framing of this problem is to think of a string
+of text as streaming in over time. Regardless of how many words
+I have seen in a given document, I want to make as good an
+estimate as possible about whatever outcome is of interest at
+that moment.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Stateful models}}
+
+Using this idea, we can think of variable width inputs
+such that each new word simply updates our current prediction.
+In this way an RNN has two types of data inside of it:
+\begin{itemize}
+\item fixed weights, just as we have been using with CNNs
+\item stateful variables that are updated as it observes words
+in a document
+\end{itemize}
+We can also think of this as giving `memory' to the neural
+network.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah01.png}
+\end{center}
+
+A third way of thinking about recurrent neural networks is to
+think of a network that has a loop in it. However, the self-input
+get's applied the \textit{next} time it is called.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{A note on time initialization}}
+
+One confusing bit, at least for me the first time I saw RNNs, is
+the relationship between time and samples. We typically restart
+the state, or memory, of the RNN when move on to a new sample.
+This detail seems to be glossed over in most tutorials on RNNs,
+but I think captures a key idea in what these models are capturing.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Unrolling an RNN}}
+
+In truth, an RNN can be seen as a traditional feedforward neural
+network by unrolling the time component (assuming that there is
+a fixed number of time steps).
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=3cm]{img/cloah02.png}
+\end{center}
+
+Unrolling the recurrent neural network.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Training RNNs}}
+
+While it is nice that we get a `running output' from the model, when
+we train RNNs we typically ignore all but the final output to the
+model. Getting the right answer after we have looked at the entire
+document is the end goal, anyway. One we do this, back-propogation can
+be used as before.
+
+While we could unroll the RNN into a FF network and apply the algorithms
+we saw in Lecture 13, for memory and CPU efficient techniques exist to
+short-cut this approach.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\magenta{I. Load IMDB dataset}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\magenta{II. Basic RNN example}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah03.png}
+\end{center}
+
+Because of the state in the model, words that occur
+early in the sequence can still have an influence on
+later outputs.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah04.png}
+\end{center}
+
+Using a basic dense layer as the RNN unit, however, makes it
+so that long range effects are hard to pass on. That is, words
+that occur early in the sequence are harder to use later
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+Long short-term memory was original proposed way
+back in 1997 in order to alleviate this problem.
+\begin{quote}
+Hochreiter, Sepp, and Jürgen Schmidhuber. "Long
+short-term memory." Neural computation 9, no. 8 (1997):
+1735-1780.
+\end{quote}
+Their specific idea that has had surprising staying power.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+A great reference for dissecting the details of their
+paper is the blog post by Christopher Olah:
+\begin{quote}
+\url{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
+\end{quote}
+I will pull extensively from throughout today's lecture.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=6cm]{img/lstmPaperImg.jpg}
+\end{center}
+
+Some people consider LSTM's to be a bit hard to understand;
+here is a diagram from the original paper that partially
+explains where the confusion comes from!
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah05.png}
+\end{center}
+
+In fact, though, basic idea of an LSTM layer is exactly
+the same as a simple RNN layer.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah06.png}
+\end{center}
+
+It is just that the internal mechanism is just a bit more
+complex, with two separate self-loops and several independent
+weight functions to serve slightly different purposes.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=2.5cm]{img/cloah07.png}
+\end{center}
+
+The diagrams use a few simple mechanics, most of which
+we have seen in some form in CNNs. The pointwise operation,
+for example, is used in the ResNet architecture when creating
+skip-connections.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah08.png}
+\end{center}
+
+A key idea is to separate the response that is passed back into
+the LSTM and the output that is emitted; there is not particular
+reason these need to be the same. The \textbf{cell state} is the
+part of the layer that get's passed back, and is changed from
+iteration to iteration only by two linear functions.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah09.png}
+\end{center}
+
+Next, consider the \textbf{forget gate}. It uses the previous
+output $h_{t-1}$ and the current input $x_t$ to determine
+multiplicative weights to apply to the cell state. We use a
+sigmoid layer here because it makes sense to have weights
+between $0$ and $1$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah10.png}
+\end{center}
+
+Next, we have a choice of how to update the cell state. This
+is done by multiplying an input gate (again, with a
+sigmoid layer) by a tanh activated linear layer.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah11.png}
+\end{center}
+
+The cell state of the next iteration is now completely
+determined, and can be calculated directly.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah12.png}
+\end{center}
+
+Now, to determine the output of the model, we want to
+emit a weighted version of the cell state. This is done
+by applying a tanh activation and multiplying by the
+fourth and final set of weights: the output weights.
+This passed both as an output to the LSTM layer as well
+as into the next time step of the LSTM.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\magenta{III. LSTM}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah13.png}
+\end{center}
+
+Over the years, variants on the LSTM layers have been given.
+Confusingly, these are often presented \textit{as} LSTM layers
+rather than minor variants on the original technique. One
+modification is to add \textbf{peepholes} so that the input,
+forget, and output gates also take the current cell state
+into account.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah14.png}
+\end{center}
+
+One natural extension is to set the input and forget
+gates to be the same (as they are both forgetting
+part of the cell state, anyway).
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+A more dramaticly differet alternative is known as
+a Gated Recurrent Unit, originally presented in this
+paper:
+\begin{quote}
+Cho, Kyunghyun, Bart van Merriënboer, Dzmitry Bahdanau,
+and Yoshua Bengio. "On the properties of neural machine
+translation: Encoder-decoder approaches."
+arXiv preprint arXiv:1409.1259 (2014).
+\end{quote}
+One benefit is that is offers a slight simplification in
+the model with no systematic performance penalty. Along
+with LSTM, it is the only other model implemented in
+keras, which should point to its growing popularity.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\begin{center}
+\includegraphics[height=4.5cm]{img/cloah15.png}
+\end{center}
+
+In short, in combines the input and cell states together,
+and combines the forget and input gates. This results in
+one fewer set of weight matrices to learn.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+If you would like a good, comphrensive, and empirical
+evaluation of the various tweaks to these recurrent
+structures, I recommend this paper
+\begin{quote}
+Greff, Klaus, Rupesh Kumar Srivastava, Jan Koutník, Bas R. Steunebrink,
+and Jürgen Schmidhuber. "LSTM: A search space odyssey."
+arXiv preprint arXiv:1503.04069 (2015).
+\end{quote}
+As well as this article:
+\begin{quote}
+Jozefowicz, Rafal, Wojciech Zaremba, and Ilya Sutskever.
+"An empirical exploration of recurrent network architectures."
+In Proceedings of the 32nd International Conference on Machine
+Learning (ICML-15), pp. 2342-2350. 2015.
+\end{quote}
+Though, once you fully understand the LSTM model, the
+specifics amongst the competing approaches typically do not
+require understanding any new big ideas.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\magenta{IV. GRU}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\magenta{V. Evaluating a sequence of inputs}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\magenta{VI. Visualize the output}
+
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+
+
