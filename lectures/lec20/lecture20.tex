@@ -325,20 +325,7 @@ is not need to actually create the one-hot vector, and multiply by
 all of $W$. We can just go directly from the index of the word in
 the vocabulary, and read off of the $j$-th row of $W$.
 
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile] \frametitle{} \oldB \small
-
-\yblue{\textbf{Word embeddings}}
-
-A word embedding is nothing more than a compression of a one-hot
-representation and a dense hidden layer in a neural network. There
-is not need to actually create the one-hot vector, and multiply by
-all of $W$. We can just go directly from the index of the word in
-the vocabulary, and read off of the $j$-th row of $W$.
-
-What are we doing here, really? The whole idea is to map a word as
+\pause What are we doing here, really? The whole idea is to map a word as
 a vector in a $p$-dimensional space. Much like the bottleneck layer
 in an autoencoder, the representation in this space often has a
 semantic meaning.
@@ -457,21 +444,10 @@ something akin to an autoencoder.
 
 \yblue{\textbf{How to autoencode}}
 
-Using a direct autoencoder on a single not make a lot of sense; it would
-essentially just boil down to predicting the most frequent words as
-well as possible in the bottleneck layer. The latent structure only
+Using a direct autoencoder on a single word does not make a lot of sense;
+it would essentially just boil down to predicting the most frequent words
+as well as possible in the bottleneck layer. The latent structure only
 comes in when we view a sequence of terms.
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile] \frametitle{} \oldB \small
-
-\yblue{\textbf{How to autoencode}}
-
-Using a direct autoencoder on  not make a lot of sense; it would
-essentially just boil down to predicting the most frequent words as
-well as possible in the bottleneck layer.
 
 Instead, we want to use the context of a word to predict other similar
 words that tend to co-occur with it. We'll look at a set of popular
@@ -484,17 +460,17 @@ approaches to doing this.
 
 \yblue{\textbf{Words in context}}
 
-A key idea from the landmark paper
+A key idea from the highly cited paper:
 \begin{quote}
 Mikolov, Tomas, Ilya Sutskever, Kai Chen, Greg S. Corrado, and
-Jeff Dean. "Distributed representations of words and phrases
+Jeff Dean. ``Distributed representations of words and phrases
 and their compositionality." In Advances in neural information
 processing systems, pp. 3111-3119. (2013).
 \end{quote}
 And the closely related follow-up:
 \begin{quote}
 Mikolov, Tomas, Kai Chen, Greg Corrado, and Jeffrey Dean.
-"Efficient estimation of word representations in vector space."
+``Efficient estimation of word representations in vector space."
 arXiv preprint arXiv:1301.3781 (2013).
 \end{quote}
 Is to try to predict a word given its context. Specifically, we
@@ -540,6 +516,13 @@ words that tend to co-occur with it.
 
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+These two approaches are called \blue{skip grams} and
+\blue{continuous bag of words}, respectively.
+
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{} \oldB \small
@@ -557,7 +540,7 @@ While we have generally steered away from the more theoretical
 papers, I want to draw your attention to one very interesting
 one that puts a surprisingly neat theory around word embeddings:
 \begin{quote}
-Levy, Omer, and Yoav Goldberg. "Neural word embedding as
+Levy, Omer, and Yoav Goldberg. ``Neural word embedding as
 implicit matrix factorization." In Advances in Neural
 Information Processing Systems, pp. 2177-2185. 2014.
 \end{quote}
@@ -584,7 +567,7 @@ Another, very closely related technique to word2vec is given
 by GloVe:
 \begin{quote}
 Pennington, Jeffrey, Richard Socher, and Christopher D. Manning.
-"GloVe: Global Vectors for Word Representation."
+``GloVe: Global Vectors for Word Representation."
 In EMNLP, vol. 14, pp. 1532-1543. (2014).
 \end{quote}
 The differences are subtle at the level we are talking about,
@@ -601,7 +584,7 @@ word embeddings. For example, the ideas started with this
 paper:
 \begin{quote}
 Huang, Eric H., Richard Socher, Christopher D. Manning, and
-Andrew Y. Ng. "Improving word representations via global
+Andrew Y. Ng. ``Improving word representations via global
 context and multiple word prototypes." In Proceedings of the
 50th Annual Meeting of the Association for
 Computational Linguistics: Long Papers-Volume 1, pp. 873-882.
@@ -615,12 +598,12 @@ meanings.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{} \oldB \small
 
-Finally, there is still some open questions in the world of
+Finally, there are still some open questions in the world of
 word embeddings. For example, the ideas started with this
 paper:
 \begin{quote}
 Huang, Eric H., Richard Socher, Christopher D. Manning, and
-Andrew Y. Ng. "Improving word representations via global
+Andrew Y. Ng. ``Improving word representations via global
 context and multiple word prototypes." In Proceedings of the
 50th Annual Meeting of the Association for
 Computational Linguistics: Long Papers-Volume 1, pp. 873-882.
