@@ -13,7 +13,7 @@
 
 {\fontsize{0.7cm}{0cm}\selectfont Lecture 21 \\\vspace{0.2cm}
 Recurrent Neural Networks}\\\vspace{0.5cm}
-20 April 2016
+25 April 2016
 
 \vspace{2cm}
 
@@ -26,6 +26,19 @@ STAT 365/665
 \begin{minipage}{0.3\textwidth}\raggedleft
 \includegraphics[scale=0.3]{../yale-logo.png}
 \end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \small
+
+\yblue{\textbf{Notes}}
+
+\begin{itemize}
+\item Problem set 6 was handed back yesterday
+\item Problem sets 7 \& 8 will be returned by Thursday
+\item Problem set 9 is due a week from today
+\end{itemize}
 
 \end{frame}
 
@@ -91,15 +104,33 @@ get's applied the \textit{next} time it is called.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{} \oldB \large
+
+A fourth way of thinking about a recurrent neural network is
+mathematically. We now have two parts to the update function
+in the RNN:
+\begin{align*}
+h_{t} &= \blue{W x_t + b} + \magenta{U h_{t-1}}
+\end{align*}
+\pause Notice that $U$ must always be a square matrix,
+because we could unravel this one time further to yield:
+\begin{align*}
+h_{t} &= W x_t + b + U W x_{t-1} + U b + U^2 h_{t-2}
+\end{align*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{} \oldB \small
 
 \yblue{\textbf{A note on time initialization}}
 
 One confusing bit, at least for me the first time I saw RNNs, is
 the relationship between time and samples. We typically restart
-the state, or memory, of the RNN when move on to a new sample.
+the state, or memory, of the RNN when we move on to a new sample.
 This detail seems to be glossed over in most tutorials on RNNs,
-but I think captures a key idea in what these models are capturing.
+but I think it clarifies a key idea in what these models are capturing.
 
 \end{frame}
 
@@ -133,12 +164,12 @@ Unrolling the recurrent neural network.
 While it is nice that we get a `running output' from the model, when
 we train RNNs we typically ignore all but the final output to the
 model. Getting the right answer after we have looked at the entire
-document is the end goal, anyway. One we do this, back-propogation can
+document is the end goal, anyway. To do this, back-propogation can
 be used as before.
 
 While we could unroll the RNN into a FF network and apply the algorithms
-we saw in Lecture 13, for memory and CPU efficient techniques exist to
-short-cut this approach.
+we saw in Lecture 13, for both memory consumption and computational
+efficiency, techniques exist to short-cut this approach.
 
 \end{frame}
 
@@ -177,8 +208,7 @@ later outputs.
 \end{center}
 
 Using a basic dense layer as the RNN unit, however, makes it
-so that long range effects are hard to pass on. That is, words
-that occur early in the sequence are harder to use later
+so that long range effects are hard to pass on.
 
 \end{frame}
 
@@ -204,7 +234,8 @@ paper is the blog post by Christopher Olah:
 \begin{quote}
 \url{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
 \end{quote}
-I will pull extensively from throughout today's lecture.
+I will pull extensively from it throughout the remainder of
+today's lecture.
 
 \end{frame}
 
@@ -268,7 +299,7 @@ skip-connections.
 \end{center}
 
 A key idea is to separate the response that is passed back into
-the LSTM and the output that is emitted; there is not particular
+the LSTM and the output that is emitted; there is no particular
 reason these need to be the same. The \textbf{cell state} is the
 part of the layer that get's passed back, and is changed from
 iteration to iteration only by two linear functions.
@@ -362,20 +393,19 @@ into account.
 \end{center}
 
 One natural extension is to set the input and forget
-gates to be the same (as they are both forgetting
-part of the cell state, anyway).
+gates to be the negation of one another.
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{} \oldB \small
 
-A more dramaticly differet alternative is known as
-a Gated Recurrent Unit, originally presented in this
+A more dramatically different alternative is known as
+a Gated Recurrent Unit (GRU), originally presented in this
 paper:
 \begin{quote}
 Cho, Kyunghyun, Bart van Merriënboer, Dzmitry Bahdanau,
-and Yoshua Bengio. "On the properties of neural machine
+and Yoshua Bengio. ``On the properties of neural machine
 translation: Encoder-decoder approaches."
 arXiv preprint arXiv:1409.1259 (2014).
 \end{quote}
@@ -407,13 +437,13 @@ evaluation of the various tweaks to these recurrent
 structures, I recommend this paper
 \begin{quote}
 Greff, Klaus, Rupesh Kumar Srivastava, Jan Koutník, Bas R. Steunebrink,
-and Jürgen Schmidhuber. "LSTM: A search space odyssey."
+and Jürgen Schmidhuber. ``LSTM: A search space odyssey."
 arXiv preprint arXiv:1503.04069 (2015).
 \end{quote}
 As well as this article:
 \begin{quote}
 Jozefowicz, Rafal, Wojciech Zaremba, and Ilya Sutskever.
-"An empirical exploration of recurrent network architectures."
+``An empirical exploration of recurrent network architectures."
 In Proceedings of the 32nd International Conference on Machine
 Learning (ICML-15), pp. 2342-2350. 2015.
 \end{quote}

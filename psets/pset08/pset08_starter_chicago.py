@@ -13,3 +13,4 @@ X_train = np.genfromtxt('chiCrimeMat_X_train.csv', delimiter=',')
 Y_train = np.genfromtxt('chiCrimeMat_Y_train.csv', delimiter=',')
 X_test = np.genfromtxt('chiCrimeMat_X_test.csv', delimiter=',')
 Y_test = np.genfromtxt('chiCrimeMat_Y_test.csv', delimiter=',')
+
