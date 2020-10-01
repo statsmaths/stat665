@@ -13,6 +13,7 @@ body {
 }
 
 h1 {
+  font-style:'italic';
   font-size: 40px;
   font-weight: 300;
   text-align: center;
